@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>zoid-demo</title>
+    <script src='https://unpkg.com/zoid@9.0.85/dist/zoid.js'></script>
+    <script src="https://unpkg.com/post-robot@10.0.46/dist/post-robot.js"></script>
+    <script src="./src/index.js"></script>
+</head>
+
+
+<body>
+  <h3>Log in on xyz.com</h3>
+  <!--New Changes-->
+
+  <div id="container"></div>
+
+  <div id="result"></div>
+
+  <script>
+    // Render the component
+
+    MyLoginZoidComponent({
+      name: "aumin",
+    }).render("#container");
+
+    postRobot.on("getUser" ,function (event) {
+      console.log(event)
+  // Have it return some data to the calling window
+
+  return {
+    id: 1337,
+    name: "Zippy the Pinhead",
+
+    // Yep, we're even returning a function to the other window!
+
+    // logout: function () {
+    //   return $currentUser.logout();
+    // },
+  };
+
+
+  
+});
+
+
+postRobot
+  .send(window.frames[0],"getUser8", { id: 1338 })
+  .then(function (event) {
+    var user = event.data;
+
+    console.log("Data from child",event.source, event.origin, "Got user:", user);
+
+    // Call the user.logout function from the other window!
+
+    // user.logout();
+  })
+  .catch(function (err) {
+    // Handle any errors that stopped our call from going through
+
+    console.error(err);
+  });
+
+
+
+  </script>
+</body>
+
